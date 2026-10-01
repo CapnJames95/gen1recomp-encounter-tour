@@ -1,0 +1,18 @@
+{
+  "id": "encounter_tour",
+  "name": "Encounter Tour",
+  "version": "0.3.1",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "overhaul",
+  "category": "TOOL",
+  "games": [
+    "gen3"
+  ],
+  "game_version": ">=0.3.39 <0.4.0",
+  "permissions": [
+    "engine_internals"
+  ],
+  "description": "LegalMon-style static encounter teleports, gifts, fossils, trades and event islands. Optional automatic tour and return point.",
+  "github": "CapnJames95/gen1recomp-encounter-tour"
+}
