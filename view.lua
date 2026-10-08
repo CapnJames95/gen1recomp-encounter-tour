@@ -1,20 +1,26 @@
+-- RS native small-font atlases do not render reliably in these compact mod menus.
+-- Keep measurement and drawing on the same readable native face.
+local function collectionFont()
+ local v=require('src.core.GameVersion').get()
+ return (v=='ruby' or v=='sapphire') and 'normal' or nil
+end
 return function(E)
   local V={}
   local Window=require('src.ui.game3.window')
   local Font=require('src.ui.game3.frlg_font')
   local function text(v,x,y,w,small,colors)
     v=tostring(v or '')
-    if Font.measure(v,{small=small})>w then
-      while #v>0 and Font.measure(v..'...',{small=small})>w do v=v:sub(1,-2) end
+    if Font.measure(v,{small=collectionFont()==nil and small})>w then
+      while #v>0 and Font.measure(v..'...',{small=collectionFont()==nil and small})>w do v=v:sub(1,-2) end
       v=v..'...'
     end
-    Window.printPx(v,x,y,{maxWidth=w,small=small,colors=colors})
+    Window.printPx(v,x,y,{maxWidth=w,small=collectionFont()==nil and small,colors=colors})
   end
   function V.wrap(v,width)
     local lines,line={},''
     for word in tostring(v):gmatch('%S+') do
       local nextLine=line=='' and word or line..' '..word
-      if Font.measure(nextLine,{small=true})>width and line~='' then lines[#lines+1]=line;line=word else line=nextLine end
+      if Font.measure(nextLine,{small=collectionFont()==nil and true})>width and line~='' then lines[#lines+1]=line;line=word else line=nextLine end
     end
     if line~='' then lines[#lines+1]=line end
     return lines

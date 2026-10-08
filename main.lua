@@ -3,10 +3,19 @@ return function(mod)
   local function module(name) return assert(load(assert(mod:read(name..'.lua')),'@encounter_tour/'..name..'.lua'))() end
   local rows=module('catalog');local E=module('adapter')(mod)
   local frlgRows={};for i,r in ipairs(rows) do frlgRows[i]=r end
-  local emeraldRows
+  local emeraldRows,rsRows,rsVersion,rsBundle,lastSource,lastVersion
   function E.refreshCatalog(s)
     local source=frlgRows
-    if s and s.version=='emerald' then emeraldRows=emeraldRows or module('emerald_catalog');source=emeraldRows end
+    if s and s.version=='emerald' then emeraldRows=emeraldRows or module('emerald_catalog');source=emeraldRows
+    elseif s and (s.version=='ruby' or s.version=='sapphire') then
+      local Space=require('src.core.game3.scripting.space')
+      if not rsRows or rsVersion~=s.version or rsBundle~=Space.bundle then
+        rsRows=module('rs_catalog')(s.version);rsVersion=s.version;rsBundle=Space.bundle
+      end
+      source=rsRows
+    end
+    if lastSource==source and lastVersion==(s and s.version) then return end
+    lastSource,lastVersion=source,s and s.version
     for i=#rows,1,-1 do rows[i]=nil end
     for i,r in ipairs(source) do rows[i]=r end
   end
@@ -23,7 +32,7 @@ return function(mod)
   end
   mod.hooks:wrap('ui.start_menu.items',function(next,game,items)
     local result=next(game,items);local s=E.session()
-    if type(result)~='table' or not s or (s.version~='firered' and s.version~='leafgreen' and s.version~='emerald') then return result end
+    if type(result)~='table' or not s or (s.version~='firered' and s.version~='leafgreen' and s.version~='emerald' and s.version~='ruby' and s.version~='sapphire') then return result end
     for _,r in ipairs(result) do if r.id=='encounter_tour' then return result end end
     local at=#result+1;for i,r in ipairs(result) do if r.id=='save' then at=i;break end end
     table.insert(result,at,{id='encounter_tour',label='ENCOUNTER TOUR',onSelect=function() E.game=game;safe(S.show) end})

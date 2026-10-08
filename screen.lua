@@ -53,6 +53,10 @@ return function(rows,E,C,V)
     })
   end
   local function extras()
+    if E.session().version=='ruby' or E.session().version=='sapphire' then
+      info('HOENN COVERAGE','Latios roams Ruby; Latias roams Sapphire. Southern Island has the opposite Pokemon and requires the Eon Ticket. Gifts, fossils and NPC trades use native scripts and normal requirements. Repeat starters are in Encounter Reset. Mascot story scenes and the first Steven Kecleon scene are not replayed. No Aurora, Mystic Ticket or Old Sea Map islands exist in these games.')
+      return
+    end
     if E.session().version=='emerald' then
       info('HOENN COVERAGE','Latias or Latios roams Hoenn according to your TV choice. Old Sea Map Mew requires a Japanese Emerald origin, so no English-ROM teleport is offered. Starter selection, fossils, NPC trades and story gifts not listed here must be reached normally. The catalogue covers verified static destinations; teleporting does not unlock story requirements.')
       return
@@ -68,7 +72,7 @@ return function(rows,E,C,V)
     C.bind();S.active=true;S.pages={}
     local s=E.session();S.frameType=require('src.core.game3.options').ensure(s).frameType or 0
     push('ENCOUNTER TOUR',{
-      {label='Browse encounters',help=s.version=='emerald' and 'Hoenn legends, static battles, gifts, fossils and trades.' or 'Starters, legends, gifts, fossils, prizes and trades.',action=browse},
+      {label='Browse encounters',help=(s.version=='emerald' or s.version=='ruby' or s.version=='sapphire') and 'Hoenn legends, static battles, gifts, fossils and trades.' or 'Starters, legends, gifts, fossils, prizes and trades.',action=browse},
       {label='Automatic tour',help='Visit each unresolved encounter in sequence.',action=controls},
       {label='Return to start',help='Returns your position; keeps acquired Pokemon and progress.',action=function() act(C.back) end},
       {label='Other special Pokemon',help='Roamers and external events explained.',action=extras},

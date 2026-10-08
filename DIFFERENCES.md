@@ -2,14 +2,8 @@
 
 Visit static encounters, gifts, fossils and NPC trades.
 
-# Encounter Tour
+Supports Ruby, Sapphire, Emerald, FireRed and LeafGreen.
 
-Visit static encounters, gifts, fossils and NPC trades.
+Adds Ruby/Sapphire destinations, starters, gifts, fossils and NPC trades, with native progression checks and prepared Groudon/Kyogre repeat encounters.
 
-For **Emerald, FireRed and LeafGreen**. Recommend **gen1recomp 0.3.42+**, especially for Sweet Scent.
-
-- Select individual encounter destinations or run a supported tour.
-- Covers game-specific static encounters, gifts, fossils and trades.
-- Includes return-point support; preserves native encounter eligibility checks.
-
-The repository migration changes only package metadata and documentation; runtime Lua matches collection v1.3.
+See [README](README.md) for features, controls and limitations.
